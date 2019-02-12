@@ -1,0 +1,68 @@
+.calc {
+	height: 3.5rem;
+}
+pre {
+	color: silver;
+}
+.arrow {
+  border:       solid currentColor;
+  border-width: 0 .2em .2em 0;
+  display:      inline-block;
+  color: #fff;
+  font-size: 2rem;
+    transform: rotate(-45deg);
+    width: 1rem;
+    height: 1rem;
+    
+}
+.collapsed .arrow {
+	 transform: rotate(45deg);
+}
+.card-body > * {
+	margin: auto;
+}
+/*.smallfoto {
+	align-items: center;
+}*/
+/*.smallfoto a{
+	border: 1px solid transparent;
+	border-radius: 3px;
+}*/
+
+.smallfoto a:hover{
+	border: 1px solid #3b8475;
+	border-radius: 3px;
+}
+/*.smallfoto > a {
+	width: 20%;
+}*/
+.bigfoto img{
+	width: 100%;
+}
+.card .h6 {
+	white-space: normal;
+}
+.input-group-text {
+	width: 5rem;
+}
+
+
+.figureValA, .figureValB, .figureValC, .figureValD {
+	position: absolute;
+}
+.figureValA {
+	left: 50%;
+    top: -1.5rem;
+}
+.figureValB {
+    top: 50%;
+    left: -5%;
+}
+.figureValC {
+    bottom: 0rem;
+    right: -2%;	
+}
+.figureValD {
+    bottom: -1.5rem;
+    left: 25%;	
+}

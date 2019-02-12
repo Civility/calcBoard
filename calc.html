@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>vue-calc-v.0.4</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/app.css">
+</head>
+<body> 
+	<div class="container-fluid my-1" id="app">
+		<app-progress :val="progressbar" :max="menus.length"></app-progress>
+
+		<div class="row">
+			<section class="col-4 col-sm-4 text-center bg-white offset-2">
+				<h1 class="p-3">Ваша Будущая терраса</h1>
+				<div class="gallery d-flex flex-column" id="gallery" >
+					<div class='bigfoto' id='bigfoto'>
+						<img v-model="slide" :src="'img/'+sectionProfile+'/'+shapeTag+'-'+directionTag+'-2-'+coverTag+'_'+slide+'.jpg'" >
+					</div>
+					<div class='smallfoto row' id='smallfoto'>
+						<a href="#" v-for="k in 4" class="col-3">
+							<img  @click="bigfoto(k)" :value="k" :data="sectionProfile" :name="menuSection" :src="'img/'+sectionProfile+'/'+shapeTag+'-'+directionTag+'-2-'+coverTag+'_'+[k-1]+'.jpg'" class="img-fluid">
+						</a>
+					</div>
+				</div>
+			</section>
+			<section class="col-4 col-sm-4" id="calcForm">
+				<nav class="navbar navbar-dark bg-dark text-white p-3">
+					<div class="align-top my-3 d-flex justify-content-around w-100 flex-wrap">
+						<img src="img/logo.png" width="50" height="50" alt="logo">
+						<h2>Добро Пожаловать!</h2>
+					</div>
+					<div v-if="visible" class="menu accordion flex-grow-1" id="accordionCalc">
+						<div class="card" v-for="(menu, i) in menus"> 
+
+							<div :id="menu.section" type="button" data-toggle="collapse" :data-target="'#board'+ menu.section" aria-expanded="true" :aria-controls="'board'+menu.section" class="h3 p-2 btn btn-dark d-flex align-items-center" :class="{'collapsed': selectMenuIndex === i}" @click="progress(i)" v-model="selectMenuIndex">
+								<small class="mr-1 text-silver">{{i}}-{{menu.section}}</small>
+								<span class="badge badge-secondary">{{i+1}}</span>
+								<h1 class="h6 flex-grow-1" >{{menu.desc}}</h1>
+								<span class="badge"><i class="arrow"></i></span>
+							</div> 
+
+
+							<div :id="'board'+ menu.section" class="collapse bg-dark" :aria-labelledby="menu.section" data-parent="#accordionCalc" :class="{'show': selectMenuIndex === i}">
+								<div class="card-body row"> 
+									<template v-for="(arr, index) in menu.arrs">
+										<a href="#" :data="index + 1" @click="press(menu, arr,i, index)" class="col">
+											<img :src="arr.img" :alt="arr.series">
+											<p class="m-0 text-white">{{arr.title}}</p>
+										</a>
+										<!-- <pre class="w-100">{{index}}-terDos: {{arr}}</pre> -->
+										<!-- <pre class="w-100" v-if="arr.TorZag">{{i}}-TorZag: {{arr.TorZag}}</pre> -->
+										<!-- <pre class="w-100" v-if="arr.TerDosk">val: 	{{menu}}</pre>															 -->
+									</template>
+									<template v-if="menu.section === 'size'">
+										<p>Прилегает к стене?</p>
+										<div class="custom-control custom-radio custom-control-inline">
+											<input type="radio" id="no" value="Нет" class="custom-control-input" v-model="checkbox" checked="checked">
+											<label class="custom-control-label" for="no">Нет</label>
+										</div>
+										<div class="custom-control custom-radio custom-control-inline">
+											<input type="radio" id="yes" value="Да" class="custom-control-input" v-model="checkbox" checked="checked">
+											<label class="custom-control-label" for="yes">Да</label>
+										</div>
+
+										<div class="input-group mb-3">
+											<div class="input-group-prepend">
+												<span class="input-group-text">A</span>
+											</div>
+											<input type="number" class="form-control" maxlength="5" min="0" minlength="0" max="999" placeholder="0" aria-label="A" v-model.number="valA">
+											<div class="input-group-append">
+												<span class="input-group-text" v-text="valA || 0"></span>
+											</div>
+										</div>
+										<div class="input-group mb-3">
+											<div class="input-group-prepend">
+												<span class="input-group-text">B</span>
+											</div>
+											<input type="number" class="form-control"  maxlength="5" min="0" minlength="0" max="999" placeholder="0" aria-label="B" v-model.number="valB">
+											<div class="input-group-append">
+												<span class="input-group-text" v-text="valB || 0" ></span>
+											</div>
+										</div>
+
+										<div class="input-group mb-3" v-show="Shape !== 'pryamo'">
+											<div class="input-group-prepend">
+												<span class="input-group-text">C</span>
+											</div>
+											<input type="number" class="form-control"  maxlength="5" min="0" minlength="0" max="999" placeholder="0" aria-label="C" v-model.number="valC">
+											<div class="input-group-append">
+												<span class="input-group-text" v-text="valC || 0" ></span>
+											</div>
+										</div>
+
+										<div class="input-group mb-3" v-show="Shape !== 'pryamo'">
+											<div class="input-group-prepend">
+												<span class="input-group-text">D</span>
+											</div>
+											<input type="number" class="form-control"  maxlength="5" min="0" minlength="0" max="999" placeholder="0" aria-label="D" v-model.number="valD">
+											<div class="input-group-append">
+												<span class="input-group-text" v-text="valD || 0" ></span>
+											</div>
+										</div>																				
+									</template>
+
+								</div>						
+							</div>
+
+						</div>
+					</div>
+
+					<div v-else class="w-100">
+						<p>TEXT</p>
+					</div>
+					<!-- 					<button @click="visible = !visible, butCalc(progressbar)" type="submit" class="btn btn-dark border d-flex justify-content-center w-100 p-3 h3 my-3" :disabled="notActive">{{textVis}}</button> -->
+					<style>
+						.fade-enter-active, .fade-leave-active {
+  transition: 1s ease;
+}
+					</style>
+<!-- <div id="demo">
+  <button v-on:click="press = !press">
+    Переключить
+  </button>
+  <transition name="fade">
+    <p v-if="press">привет</p>
+  </transition>
+</div> -->
+					<button @click="visible = !visible" type="submit" class="btn btn-dark border d-flex justify-content-center w-100 p-3 h3 my-3" :disabled="notActive">{{textVis}}</button>
+
+				</nav>
+			</section>
+			<samp class="col-2 col-sm-2 flex-wrap">
+				<table class="table table-bordered table-responsive">
+					<caption class="px-3">Округление чисел до целого</caption>
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Значение</th>
+						</tr>
+					</thead>
+
+					<tbody v-model="calc">
+						<tr>
+							<th scope="row">S</th>
+							<td>{{S}}</td>
+						</tr>
+						<tr>
+							<th scope="row">P</th>
+							<td>{{P}}</td>
+						</tr>
+						<tr>
+							<th scope="row">TerDosk</th>
+							<td>{{resTerDosk}}</td>
+						</tr>
+						<tr>
+							<th scope="row">NesLag</th>
+							<td>{{resNesLag}}</td>
+						</tr>
+						<tr>
+							<th scope="row">MontNab</th>
+							<td>{{resMontNab}}</td>
+						</tr>
+						<tr>
+							<th scope="row">YglProf</th>
+							<td>{{resYglProf}}</td>
+						</tr>
+						<tr v-if="TorZag">
+							<th scope="row">TorZag</th>
+							<td>{{resTorZag}}</td>
+						</tr>
+						<tr v-if="StClips">
+							<th scope="row" >StClips</th>
+							<td>{{StClips}}</td>
+						</tr>
+						<tr>
+							<th scope="row">Выбрано</th>
+							<td>{{ checkbox }}</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<!-- <pre class="w-100">val: {{calc}}</pre> -->
+			</div>				
+		</samp>
+		<section class="container my-3">
+			<samp class="row">
+				<div class="col-auto d-flex flex-column" v-if="Shape === 'pryamo'">
+					<var class="figureValA" v-text="valA"></var>
+					<var class="figureValB" v-text="valB"></var>
+					<figure class="figure bg-dark m-0" :style="square" style="max-width: 20rem; max-height: 20rem"></figure>
+					<figcaption class="figure-caption text-right"></figcaption>
+				</div>
+				<div class="col-auto d-flex flex-column" v-else>
+					<var class="figureValA" v-text="valA"></var>
+					<var class="figureValB" v-text="valB"></var>	
+					<figure class="figure bg-dark m-0" :style="[square]" style="max-width: 70rem; max-height: 70rem"></figure>
+					<figure class="figure bg-dark m-0" :style="[corner]" style="max-width: 70rem; max-height: 70rem"></figure>
+					<var class="figureValC" v-text="valC"></var>						
+					<var class="figureValD" v-text="valD"></var>
+					<figcaption class="figure-caption text-right"></figcaption>
+				</div>					
+			</samp>
+		</section>
+
+	</div>
+	<script src="js/jq.js"></script>
+	<script src="js/bootstrap.js"></script>
+	<script src="js/vue.min.js"></script>
+	<script src="js/app.js"></script>
+</body>
+</html>
